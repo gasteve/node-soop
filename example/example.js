@@ -1,13 +1,8 @@
 var load = require('soop').load;
 
-function printPerson(aPerson) {
-  console.log('my name is: '+aPerson.name()+
-      ' (last updated '+aPerson.lastUpdate+')');
-};
-
 // basic example
 var Person = require('./Person');
-var me = Person.default();
+var me = new Person();
 me.name('John');
 me.print();
 
