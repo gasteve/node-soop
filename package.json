@@ -16,11 +16,19 @@
     "load",
     "require"
   ],
-  "author": "Stephen Pair",
-  "dependencies": { "callsite": "1.0.0" },
+  "author": {
+    "name": "Stephen Pair"
+  },
+  "dependencies": {
+    "callsite": "1.0.0"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/gasteve/node-soop/issues"
   },
-  "homepage": "https://github.com/gasteve/node-soop"
+  "homepage": "https://github.com/gasteve/node-soop",
+  "readme": "node-soop\n=========\n\nSoop up your JavaScript.\n",
+  "readmeFilename": "README.md",
+  "_id": "soop@0.1.0",
+  "_from": "soop@"
 }

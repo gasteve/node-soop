@@ -28,6 +28,12 @@ module.exports = function(constructor) {
     }
   };
 
+  // a standarized way to access a cached default instance
+  constructor.default = function() {
+    if(!this._default) this._default = new this();
+    return this._default;
+  };
+
   // set the parent if one is specified
   if(constructor.parent) {
     constructor.inherit(constructor.parent);
@@ -37,6 +43,9 @@ module.exports = function(constructor) {
 };
 
 // load the given module using the given imports
+// @fname the module name (relative paths are relative to the caller's 
+//        location in the file system
+// @imports namespace for binding values in the loaded module
 module.exports.load = function(fname, imports) {
   var callerFilename = callsite()[1].getFileName();
   fname = path.resolve(path.dirname(callerFilename), fname);
