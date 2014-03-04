@@ -1,6 +1,6 @@
 {
   "name": "soop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Soop up your JavaScript.",
   "main": "soop.js",
   "scripts": {
