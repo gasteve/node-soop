@@ -7,7 +7,7 @@ var callsite = require('callsite');
 module.exports = function(constructor) {
   // inherit from the given constructor
   constructor.inherit = function(parent) {
-    if(arguments.length > 1) {
+    if (arguments.length > 1) {
       // this allows chaining multiple classes in the call
       parent.inherit(Array.prototype.slice.call(arguments, 1));
     }
@@ -18,8 +18,8 @@ module.exports = function(constructor) {
 
   // invoke the given method of the parent
   constructor.super = function(receiver, method, args) {
-    if(!this.super_) return;
-    if(typeof method == 'string') {
+    if (!this.super_) return;
+    if (typeof method == 'string') {
       // invoke the named method
       return this.super_.prototype[method].apply(receiver, args);
     } else {
@@ -29,13 +29,14 @@ module.exports = function(constructor) {
   };
 
   // a standarized way to access a cached default instance
-  constructor.default = function() {
-    if(!this._default) this._default = new this();
+  constructor.
+  default = function() {
+    if (!this._default) this._default = new this();
     return this._default;
   };
 
   // set the parent if one is specified
-  if(constructor.parent) {
+  if (constructor.parent) {
     constructor.inherit(constructor.parent);
   }
 
@@ -46,18 +47,27 @@ module.exports = function(constructor) {
 // @fname the module name (relative paths are relative to the caller's 
 //        location in the file system
 // @imports namespace for binding values in the loaded module
-module.exports.load = function(fname, imports) {
+var load = function(fname, imports) {
   var callerFilename = callsite()[1].getFileName();
   fname = path.resolve(path.dirname(callerFilename), fname);
   fname = require.resolve(fname);
   var cachedModule = require.cache[fname];
-  if(cachedModule) delete require.cache[fname];
+  if (cachedModule) delete require.cache[fname];
   global._imports = imports;
   var answer = require(fname);
   delete require.cache[fname];
-  if(cachedModule) require.cache[fname] = cachedModule;
+  if (cachedModule) require.cache[fname] = cachedModule;
   return answer;
 };
+
+var load_browser = function(fname, imports) {
+  global._imports = imports;
+  var split = fname.split('/');
+  var answer = require(split[split.length - 1]);
+  return answer;
+};
+
+module.exports.load = process.versions ? load : load_browser;
 
 // access the imports passed from a call to load()
 module.exports.imports = function() {
