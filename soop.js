@@ -61,9 +61,7 @@ var load = function(fname, imports) {
 };
 
 var load_browser = function(fname, imports) {
-  global._imports = imports;
-  var split = fname.split('/');
-  var answer = require(split[split.length - 1]);
+  throw new Error('load() not yet implemented for the browser');
   return answer;
 };
 
