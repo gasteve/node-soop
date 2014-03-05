@@ -29,8 +29,7 @@ module.exports = function(constructor) {
   };
 
   // a standarized way to access a cached default instance
-  constructor.
-  default = function() {
+  constructor.default = function() {
     if (!this._default) this._default = new this();
     return this._default;
   };
