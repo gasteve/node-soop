@@ -1,0 +1,60 @@
+<html>
+<head>
+<title>Soop browser example</title>
+<script src='./bundle.js'> </script>
+</head>
+<body>
+
+<h1> Browser test</h1>
+
+<div id="content"></div>
+
+<script>
+
+  console.log = function(s){
+    var div = document.getElementById('content');
+    div.innerHTML += s + '<br />';
+  };
+
+
+
+    var soop = require('../soop.js');
+    var Person = require('Person');
+//    test.run();
+
+    // basic example
+    var me = new Person();
+    me.name('John');
+    me.print();
+
+    // example use of a default instance
+    Person.default().name('Jeff(default)');
+    Person.default().print();
+
+
+    // now let's use a substitute for Date
+    var MockDate = {
+        now: function() {return 'a split second ago'}
+    };
+
+    var Person2 = soop.load('Person', {Date: MockDate});
+    var me2 = new Person2();
+    me2.name('Jack (MOCK)');
+    me2.print();
+
+    var Coder = require('./Coder.js');
+    // an example employing inheritance
+    var coder = new Coder();
+    coder.name('Jennifer');
+    coder.print();
+
+    var Coder2 = soop.load('./Coder.js', {parent: Person2});
+    // an example employing inheritance
+    var coder2 = new Coder2();
+    coder2.name('Jennifer (MOCK)');
+    coder2.print();
+
+
+</script>
+</body>
+</html>
