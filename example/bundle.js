@@ -11,15 +11,16 @@ require=
     // Save the require from previous bundle to this closure if any
     var previousRequire = typeof require == "function" && require;
 
-    function newRequire(name, jumped, rmCache){
+    function newRequire(name, jumped, skipCache){
+
+        var m;
         if (typeof name === 'string') {
           if (name.charAt(0) === '!' ) {
             name = name.substr(1);
-            rmCache=true;
+            skipCache=true;
           }
         }
-        if (rmCache) delete cache[name];
-        if(!cache[name]) {
+        if(skipCache || !cache[name]) {
             if(!modules[name]) {
                 // if we cannot find the the module within our internal map or
                 // cache jump to the current global require ie. the last bundle
@@ -35,13 +36,14 @@ require=
                 throw new Error('Cannot find module \'' + name + '\'');
             }
 
-            var m = cache[name] = {exports:{}};
+            m = {exports:{}};
+            if (!skipCache) cache[name] = m; 
             modules[name][0].call(m.exports, function(x){
                 var id = modules[name][1][x];
-                return newRequire(id ? id : x, false, rmCache);
+                return newRequire(id ? id : x, false, skipCache);
             },m,m.exports,outer,modules,cache,entry);
-        }
-        return cache[name].exports;
+        } 
+        return m ? m.exports:cache[name].exports;
     }
     for(var i=0;i<entry.length;i++) newRequire(entry[i]);
 
@@ -64,10 +66,8 @@ Coder.prototype.name = function(aString) {
 
 module.exports = require('soop')(Coder);
 
-},{"./Person":"PL+St2","soop":9}],"./Coder.js":[function(require,module,exports){
+},{"./Person":"PL+St2","soop":"WPvdJX"}],"Coder":[function(require,module,exports){
 module.exports=require('yi7t9z');
-},{}],"Person":[function(require,module,exports){
-module.exports=require('PL+St2');
 },{}],"PL+St2":[function(require,module,exports){
 (function (global){
 var imports = require('soop').imports();
@@ -94,44 +94,9 @@ module.exports = require('soop')(Person);
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"soop":9}],5:[function(require,module,exports){
-module.exports.soop = require('soop');
-module.exports.Person = require('./Person');
-module.exports.Coder = require('./Coder');
-
-
-module.exports.run = function() {
-
-    // basic example
-    var me = new test.Person();
-    me.name('John');
-    me.print();
-
-    // example use of a default instance
-    test.Person.default().name('Jeff(default)');
-    test.Person.default().print();
-
-
-    // now let's use a substitute for Date
-    var MockDate = {
-    now: function() {return 'a split second ago'}
-    };
-
-    var Person = test.soop.load('./Person', {Date: MockDate});
-    var me = new Person();
-    me.name('Jack');
-    me.print();
-
-    // an example employing inheritance
-    var Coder = test.Coder();
-    var coder = new Coder();
-    coder.name('Jennifer');
-    coder.print();
-
-};
-
-
-},{"./Coder":"yi7t9z","./Person":"PL+St2","soop":9}],6:[function(require,module,exports){
+},{"soop":"WPvdJX"}],"./Person":[function(require,module,exports){
+module.exports=require('PL+St2');
+},{}],5:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -186,7 +151,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -413,8 +378,8 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-}).call(this,require("/Users/ematiu/devel/node/node-soop/browser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"/Users/ematiu/devel/node/node-soop/browser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6}],8:[function(require,module,exports){
+}).call(this,require("/Users/ematiu/devel/node/node-soop/example/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
+},{"/Users/ematiu/devel/node/node-soop/example/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":5}],7:[function(require,module,exports){
 
 module.exports = function(){
   var orig = Error.prepareStackTrace;
@@ -426,7 +391,7 @@ module.exports = function(){
   return stack;
 };
 
-},{}],9:[function(require,module,exports){
+},{}],"WPvdJX":[function(require,module,exports){
 (function (process,global){
 var path = require('path');
 var callsite = require('callsite');
@@ -510,11 +475,7 @@ module.exports.imports = function() {
   return answer;
 };
 
-}).call(this,require("/Users/ematiu/devel/node/node-soop/browser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/Users/ematiu/devel/node/node-soop/browser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"callsite":8,"path":7}],10:[function(require,module,exports){
-module.exports=require(8)
-},{}],"../soop.js":[function(require,module,exports){
+}).call(this,require("/Users/ematiu/devel/node/node-soop/example/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"/Users/ematiu/devel/node/node-soop/example/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":5,"callsite":7,"path":6}],"soop":[function(require,module,exports){
 module.exports=require('WPvdJX');
-},{}],"WPvdJX":[function(require,module,exports){
-module.exports=require(9)
-},{"/Users/ematiu/devel/node/node-soop/browser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6,"callsite":10,"path":7}]},{},[5])
+},{}]},{},[])

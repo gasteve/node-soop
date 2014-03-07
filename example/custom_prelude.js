@@ -11,15 +11,16 @@
     // Save the require from previous bundle to this closure if any
     var previousRequire = typeof require == "function" && require;
 
-    function newRequire(name, jumped, rmCache){
+    function newRequire(name, jumped, skipCache){
+
+        var m;
         if (typeof name === 'string') {
           if (name.charAt(0) === '!' ) {
             name = name.substr(1);
-            rmCache=true;
+            skipCache=true;
           }
         }
-        if (rmCache) delete cache[name];
-        if(!cache[name]) {
+        if(skipCache || !cache[name]) {
             if(!modules[name]) {
                 // if we cannot find the the module within our internal map or
                 // cache jump to the current global require ie. the last bundle
@@ -35,13 +36,14 @@
                 throw new Error('Cannot find module \'' + name + '\'');
             }
 
-            var m = cache[name] = {exports:{}};
+            m = {exports:{}};
+            if (!skipCache) cache[name] = m; 
             modules[name][0].call(m.exports, function(x){
                 var id = modules[name][1][x];
-                return newRequire(id ? id : x, false, rmCache);
+                return newRequire(id ? id : x, false, skipCache);
             },m,m.exports,outer,modules,cache,entry);
-        }
-        return cache[name].exports;
+        } 
+        return m ? m.exports:cache[name].exports;
     }
     for(var i=0;i<entry.length;i++) newRequire(entry[i]);
 

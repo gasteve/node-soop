@@ -28,9 +28,8 @@ var pack = function (params) {
 opts.pack = pack;
 
 var b = browserify(opts);
-b.add('./example.js');
-b.require('../example/Person.js', {expose:'Person'} );
-b.require('../example/Coder.js', {expose:'Coder'} );
+b.require('./Person' );
+b.require('./Coder.js', {expose:'Coder'} );
 b.require('../soop.js', {expose:'soop'} );
 b.bundle().pipe(process.stdout);
 
