@@ -60,7 +60,14 @@ var load = function(fname, imports) {
 };
 
 var load_browser = function(fname, imports) {
-  throw new Error('load() not yet implemented for the browser');
+  global._imports = imports;
+  var answer;
+  try {
+    answer = require('!' + fname);
+  } catch (e) {
+    console.log('SOOP:' + e.msg + '\nNote that SOOP requires a custom browserify configuration. please check soop\'s readme');
+    throw e;
+  }
   return answer;
 };
 
