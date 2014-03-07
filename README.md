@@ -101,7 +101,7 @@ In order to use soop within a browser, [browserify](https://github.com/substack/
 can be used. A custom *prelude* script need to be used in browserify/browser-pack for the 
 function .load to work. This custom script is provided at [browser path](/browser)./. The follwing is an example of
 a browserify script to bundle soop classes:
-
+```
   var fs = require('fs');
   var browserify = require('browserify');
   var browserPack = require('browser-pack');
@@ -125,6 +125,6 @@ a browserify script to bundle soop classes:
   b.require('../example/Coder.js', {expose:'Coder'} );
   b.require('../soop.js', {expose:'soop'} );
   b.bundle().pipe(process.stdout);
-
+```
 A compiled bundles and a working example can be found at [browser path](/browser).
 
