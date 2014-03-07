@@ -94,3 +94,37 @@ and one that invokes a normal method on the parent.
     };
 
     module.exports = require('soop')(Coder);
+
+== Browser support ==
+
+In order to use soop within a browser, [browserify](https://github.com/substack/node-browserify) 
+can be used. A custom *prelude* script need to be used in browserify/browser-pack for the 
+function .load to work. This custom script is provided at [browser path](/browser)./. The follwing is an example of
+a browserify script to bundle soop classes:
+
+  var fs = require('fs');
+  var browserify = require('browserify');
+  var browserPack = require('browser-pack');
+  var opts = {};
+
+  var preludePath  = './custom_prelude.js';
+  var pack = function (params) {
+    params.raw = true;
+    params.sourceMapPrefix = '//#';
+    params.prelude=  fs.readFileSync(preludePath, 'utf8');;
+    params.preludePath= preludePath;
+
+    return browserPack(params);
+  };
+
+  opts.pack = pack;
+
+  var b = browserify(opts);
+  b.add('./example.js');
+  b.require('../example/Person.js', {expose:'Person'} );
+  b.require('../example/Coder.js', {expose:'Coder'} );
+  b.require('../soop.js', {expose:'soop'} );
+  b.bundle().pipe(process.stdout);
+
+A compiled bundles and a working example can be found at [browser path](/browser).
+
