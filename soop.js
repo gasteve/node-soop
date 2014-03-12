@@ -67,7 +67,7 @@ var load_browser = function(fname, imports) {
   try {
     answer = require('!' + fname);
   } catch (e) {
-    console.log('SOOP:' + e.msg + '\nNote that SOOP requires a custom browserify configuration. please check soop\'s readme');
+    console.log('SOOP:' + e.message + '\nNote that SOOP requires a custom browserify configuration. please check soop\'s readme');
     throw e;
   }
   return answer;
