@@ -6,14 +6,13 @@
 //
 // anything defined in a previous bundle is accessed via the
 // orig method which is the requireuire for previous bundles
-
 (function outer (modules, cache, entry) {
     // Save the require from previous bundle to this closure if any
     var previousRequire = typeof require == "function" && require;
 
-    function newRequire(name, jumped, skipCache){
+    function newRequire(name, jumped, inSkipCache){
 
-        var m;
+        var m, skipCache = inSkipCache; 
         if (typeof name === 'string') {
           if (name.charAt(0) === '!' ) {
             name = name.substr(1);
@@ -37,10 +36,12 @@
             }
 
             m = {exports:{}};
+            var nextSkipCache = inSkipCache ? false : skipCache;
             if (!skipCache) cache[name] = m; 
+            skipCache = false;
             modules[name][0].call(m.exports, function(x){
                 var id = modules[name][1][x];
-                return newRequire(id ? id : x, false, skipCache);
+                return newRequire(id ? id : x, false, nextSkipCache);
             },m,m.exports,outer,modules,cache,entry);
         } 
         return m ? m.exports:cache[name].exports;
